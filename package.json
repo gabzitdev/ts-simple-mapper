@@ -18,7 +18,18 @@
     "test:coverage": "vitest run --coverage",
     "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
   },
-  "keywords": [],
+  "keywords": [
+    "typescript",
+    "mapper",
+    "object-mapper",
+    "object-mapping",
+    "type-safe",
+    "transformer",
+    "data-transformation",
+    "deep-clone",
+    "utility",
+    "typescript-library"
+  ],
   "author": "gabzitdev",
   "license": "MIT",
   "devDependencies": {

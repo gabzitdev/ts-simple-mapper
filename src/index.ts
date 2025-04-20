@@ -13,7 +13,6 @@ import { AnyObject, SimpleMapOptions } from "./types";
  * @param options.exclude Array of field names to exclude from mapping
  * @param options.transforms Object containing custom transformation functions for specific fields
  * @param options.fieldMappings Object mapping source field names to target field names
- * @param options.deep Whether to perform deep cloning of objects
  * @returns A new object with the mapped fields
  *
  * @example
@@ -26,8 +25,7 @@ import { AnyObject, SimpleMapOptions } from "./types";
  *   fieldMappings: {
  *     full_name: 'name',
  *     user_id: 'id'
- *   },
- *   deep: true
+ *   }
  * });
  */
 export function simpleMap<T extends AnyObject, R extends AnyObject>(
@@ -38,7 +36,6 @@ export function simpleMap<T extends AnyObject, R extends AnyObject>(
     exclude = [],
     transforms = {},
     fieldMappings = {},
-    deep = false,
   } = options;
 
   const result = {} as R;
@@ -55,10 +52,10 @@ export function simpleMap<T extends AnyObject, R extends AnyObject>(
 
       if (transforms && targetKey in transforms) {
         (result as any)[targetKey] = transforms[targetKey](
-          deep ? cloneValue(value) : value
+          cloneValue(value)
         );
       } else {
-        (result as any)[targetKey] = deep ? cloneValue(value) : value;
+        (result as any)[targetKey] = cloneValue(value);
       }
     }
   }

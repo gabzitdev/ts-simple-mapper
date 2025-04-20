@@ -121,87 +121,55 @@ describe("simpleMap", () => {
     });
   });
 
-  describe("deep cloning", () => {
-    it("should perform deep cloning when enabled", () => {
-      // Arrange
-      type Source = {
-        nested: { value: number };
-      };
-      const source: Source = {
-        nested: { value: 42 },
-      };
-      const options: SimpleMapOptions = {
-        deep: true,
-      };
+  it("should handle nested objects", () => {
+    // Arrange
+    type Source = {
+      nested: { value: number };
+    };
+    const source: Source = {
+      nested: { value: 42 },
+    };
 
-      // Act
-      const result = simpleMap<Source, Source>(source, options);
+    // Act
+    const result = simpleMap<Source, Source>(source);
 
-      // Assert
-      expect(result).toEqual(source);
-      expect(result.nested).not.toBe(source.nested);
-    });
+    // Assert
+    expect(result).toEqual(source);
+    expect(result.nested).not.toBe(source.nested); // Should create a deep copy
+  });
 
-    it("should not perform deep cloning when disabled", () => {
-      // Arrange
-      type Source = {
-        nested: { value: number };
-      };
-      const source: Source = {
-        nested: { value: 42 },
-      };
-      const options: SimpleMapOptions = {
-        deep: false,
-      };
+  it("should handle arrays", () => {
+    // Arrange
+    type Source = {
+      items: number[];
+    };
+    const source: Source = {
+      items: [1, 2, 3],
+    };
 
-      // Act
-      const result = simpleMap<Source, Source>(source, options);
+    // Act
+    const result = simpleMap<Source, Source>(source);
 
-      // Assert
-      expect(result).toEqual(source);
-      expect(result.nested).toBe(source.nested);
-    });
+    // Assert
+    expect(result).toEqual(source);
+    expect(result.items).not.toBe(source.items); // Should create a deep copy
+  });
 
-    it("should handle arrays with deep cloning", () => {
-      // Arrange
-      type Source = {
-        items: number[];
-      };
-      const source: Source = {
-        items: [1, 2, 3],
-      };
-      const options: SimpleMapOptions = {
-        deep: true,
-      };
+  it("should handle dates", () => {
+    // Arrange
+    type Source = {
+      date: Date;
+    };
+    const source: Source = {
+      date: new Date("2024-01-01"),
+    };
 
-      // Act
-      const result = simpleMap<Source, Source>(source, options);
+    // Act
+    const result = simpleMap<Source, Source>(source);
 
-      // Assert
-      expect(result).toEqual(source);
-      expect(result.items).not.toBe(source.items);
-    });
-
-    it("should handle dates with deep cloning", () => {
-      // Arrange
-      type Source = {
-        date: Date;
-      };
-      const source: Source = {
-        date: new Date("2024-01-01"),
-      };
-      const options: SimpleMapOptions = {
-        deep: true,
-      };
-
-      // Act
-      const result = simpleMap<Source, Source>(source, options);
-
-      // Assert
-      expect(result).toEqual(source);
-      expect(result.date).not.toBe(source.date);
-      expect(result.date).toBeInstanceOf(Date);
-    });
+    // Assert
+    expect(result).toEqual(source);
+    expect(result.date).not.toBe(source.date); // Should create a new Date
   });
 
   describe("special cases", () => {
@@ -255,12 +223,9 @@ describe("simpleMap", () => {
       };
       const source: Source = {};
       source.self = source;
-      const options: SimpleMapOptions = {
-        deep: true
-      };
 
       // Act & Assert
-      expect(() => simpleMap<Source, Source>(source, options))
+      expect(() => simpleMap<Source, Source>(source))
         .toThrowError("Circular reference detected during deep cloning");
     });
   });
