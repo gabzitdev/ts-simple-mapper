@@ -1,7 +1,7 @@
 {
   "name": "ts-simple-mapper",
   "description": "A lightweight utility for mapping object properties between different shapes",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "scripts": {
     "build": "vite build",
@@ -12,13 +12,6 @@
   "main": "dist/ts-simple-mapper.js",
   "module": "dist/ts-simple-mapper.mjs",
   "types": "dist/types/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/ts-simple-mapper.mjs",
-      "require": "./dist/ts-simple-mapper.js"
-    },
-    "./types": "./dist/types/index.d.ts"
-  },
   "files": [
     "dist"
   ],
