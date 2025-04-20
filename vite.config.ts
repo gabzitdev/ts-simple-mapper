@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: 'src/index.ts',
-      name: 'Typescript data sanitizer',
+      name: 'Typescript simple mapper',
       fileName: 'ts-simple-mapper',
       formats: ['es', 'cjs'],
     },
