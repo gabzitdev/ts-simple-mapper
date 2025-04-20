@@ -12,7 +12,7 @@ export default defineConfig({
         'dist/',
         '**/*.d.ts',
         '**/*.test.ts',
-        '**/*.config.ts'
+        '**/*.config.*'
       ],
       thresholds: {
         lines: 90,
