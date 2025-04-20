@@ -1,6 +1,15 @@
 #!/bin/sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+npm run test:coverage
+
+# Check if any tags are being pushed
+TAG_REFS=$(git for-each-ref --format='%(refname:short)' refs/tags --sort=-creatordate)
+if [ -z "$TAG_REFS" ]; then
+  # No tags exist, allow the push
+  exit 0
+fi
+
 # Block pushing all tags at once
 if echo "$GIT_PUSH_COMMAND" | grep -q -- "--tags"; then
   echo "❌ Error: Pushing all tags via '--tags' is not allowed."
@@ -10,7 +19,6 @@ if echo "$GIT_PUSH_COMMAND" | grep -q -- "--tags"; then
 fi
 
 # Check for multiple tags being pushed
-TAG_REFS=$(git for-each-ref --format='%(refname:short)' refs/tags --sort=-creatordate)
 TAG_COUNT=$(echo "$TAG_REFS" | wc -l)
 
 if [ "$TAG_COUNT" -gt 1 ]; then
