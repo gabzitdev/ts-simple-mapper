@@ -1,7 +1,7 @@
 {
   "name": "ts-simple-mapper",
   "description": "A lightweight utility for mapping object properties between different shapes",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "type": "module",
   "scripts": {
     "build": "vite build",

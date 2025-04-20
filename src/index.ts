@@ -4,7 +4,7 @@ export * from "./types";
  * A lightweight utility for mapping object properties between different shapes
  */
 
-import { AnyObject, SimpleMapOptions } from "./types";
+import { AnyObject, MapOptions } from "./types";
 
 /**
  * Maps properties from a source object to a target object with support for
@@ -32,7 +32,7 @@ import { AnyObject, SimpleMapOptions } from "./types";
  */
 export function simpleMap<T extends AnyObject, R extends AnyObject>(
   source: T,
-  options: SimpleMapOptions = {}
+  options: MapOptions = {}
 ): R {
   const {
     exclude = [],

@@ -6,7 +6,7 @@ export type AnyObject = Record<string, any>;
 /**
  * Configuration options for the simpleMap function
  */
-export type SimpleMapOptions = {
+export type MapOptions = {
   exclude?: string[];
   transforms?: Record<string, (value: any) => any>;
   fieldMappings?: Record<string, string>;
