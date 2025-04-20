@@ -15,8 +15,11 @@ jobs:
           node-version: '20'
           registry-url: 'https://registry.npmjs.org/'
       - run: npm install
+      - name: Build the project
+        run: npm run build # Add this step to build the dist folder
       - name: Run tests with coverage
         run: npm run test:coverage
-      - run: npm publish
+      - name: Publish to NPM
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
