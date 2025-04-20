@@ -18,18 +18,6 @@ if echo "$GIT_PUSH_COMMAND" | grep -q -- "--tags"; then
   exit 1
 fi
 
-# Get the list of tags being pushed
-PUSHED_TAGS=$(git push --dry-run "$@" 2>/dev/null | grep '^ *[^ ]* *refs/tags/' || true)
-TAG_COUNT=$(echo "$PUSHED_TAGS" | wc -l)
-
-if [ "$TAG_COUNT" -gt 1 ]; then
-  echo "❌ Error: Pushing multiple tags at once is not allowed."
-  echo "👉 Please push one tag at a time like: git push origin vX.Y.Z"
-  echo "   Detected $TAG_COUNT tags being pushed."
-  echo "❌ ----------------------------------------------------------"
-  exit 1
-fi
-
 # Use `git for-each-ref` to find pushed tag ref
 TAG_REF=$(echo "$TAG_REFS" | head -n1)
 
