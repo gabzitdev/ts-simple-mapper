@@ -1,3 +1,5 @@
+export * from "./types";
+
 /**
  * A lightweight utility for mapping object properties between different shapes
  */
