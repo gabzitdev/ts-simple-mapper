@@ -1,9 +1,9 @@
-import { describe, it, expect } from "vitest";
-import { simpleMap } from "../src";
-import { SimpleMapOptions } from "../src/types";
+import { describe, it, expect } from 'vitest';
+import { simpleMap } from '../src';
+import { SimpleMapOptions } from '../src/types';
 
-describe("simpleMap", () => {
-  it("should map simple objects", () => {
+describe('simpleMap', () => {
+  it('should map simple objects', () => {
     // Arrange
     type Source = {
       name: string;
@@ -11,9 +11,9 @@ describe("simpleMap", () => {
       email: string;
     };
     const source: Source = {
-      name: "John",
+      name: 'John',
       age: 30,
-      email: "john@example.com",
+      email: 'john@example.com',
     };
 
     // Act
@@ -24,21 +24,21 @@ describe("simpleMap", () => {
     expect(result).not.toBe(source); // Should create a new object
   });
 
-  it("should exclude specified fields", () => {
+  it('should exclude specified fields', () => {
     // Arrange
     type Source = {
       name: string;
       age: number;
       internalId: string;
     };
-    type Target = Omit<Source, "internalId">;
+    type Target = Omit<Source, 'internalId'>;
     const source: Source = {
-      name: "John",
+      name: 'John',
       age: 30,
-      internalId: "123",
+      internalId: '123',
     };
     const options: SimpleMapOptions = {
-      exclude: ['internalId']
+      exclude: ['internalId'],
     };
 
     // Act
@@ -46,13 +46,13 @@ describe("simpleMap", () => {
 
     // Assert
     expect(result).toEqual({
-      name: "John",
+      name: 'John',
       age: 30,
     });
-    expect(result).not.toHaveProperty("internalId");
+    expect(result).not.toHaveProperty('internalId');
   });
 
-  it("should apply custom transformations", () => {
+  it('should apply custom transformations', () => {
     // Arrange
     type Source = {
       name: string;
@@ -65,9 +65,9 @@ describe("simpleMap", () => {
       amount: number;
     };
     const source: Source = {
-      name: "John",
-      birthDate: "1990-01-01",
-      amount: "100.50",
+      name: 'John',
+      birthDate: '1990-01-01',
+      amount: '100.50',
     };
     const options: SimpleMapOptions = {
       transforms: {
@@ -80,12 +80,12 @@ describe("simpleMap", () => {
     const result = simpleMap<Source, Target>(source, options);
 
     // Assert
-    expect(result.name).toBe("John");
+    expect(result.name).toBe('John');
     expect(result.birthDate).toBeInstanceOf(Date);
     expect(result.amount).toBe(100.5);
   });
 
-  it("should map field names according to fieldMappings", () => {
+  it('should map field names according to fieldMappings', () => {
     // Arrange
     type Source = {
       full_name: string;
@@ -98,15 +98,15 @@ describe("simpleMap", () => {
       email: string;
     };
     const source: Source = {
-      full_name: "John Doe",
-      user_id: "123",
-      email_address: "john@example.com",
+      full_name: 'John Doe',
+      user_id: '123',
+      email_address: 'john@example.com',
     };
     const options: SimpleMapOptions = {
       fieldMappings: {
-        name: "full_name",
-        id: "user_id",
-        email: "email_address",
+        name: 'full_name',
+        id: 'user_id',
+        email: 'email_address',
       } as const,
     };
 
@@ -115,13 +115,13 @@ describe("simpleMap", () => {
 
     // Assert
     expect(result).toEqual({
-      name: "John Doe",
-      id: "123",
-      email: "john@example.com",
+      name: 'John Doe',
+      id: '123',
+      email: 'john@example.com',
     });
   });
 
-  it("should handle nested objects", () => {
+  it('should handle nested objects', () => {
     // Arrange
     type Source = {
       nested: { value: number };
@@ -138,7 +138,7 @@ describe("simpleMap", () => {
     expect(result.nested).not.toBe(source.nested); // Should create a deep copy
   });
 
-  it("should handle arrays", () => {
+  it('should handle arrays', () => {
     // Arrange
     type Source = {
       items: number[];
@@ -155,13 +155,13 @@ describe("simpleMap", () => {
     expect(result.items).not.toBe(source.items); // Should create a deep copy
   });
 
-  it("should handle dates", () => {
+  it('should handle dates', () => {
     // Arrange
     type Source = {
       date: Date;
     };
     const source: Source = {
-      date: new Date("2024-01-01"),
+      date: new Date('2024-01-01'),
     };
 
     // Act
@@ -172,8 +172,8 @@ describe("simpleMap", () => {
     expect(result.date).not.toBe(source.date); // Should create a new Date
   });
 
-  describe("special cases", () => {
-    it("should handle null values", () => {
+  describe('special cases', () => {
+    it('should handle null values', () => {
       // Arrange
       type Source = {
         value: null;
@@ -188,7 +188,7 @@ describe("simpleMap", () => {
       expect(result).toEqual({ value: null });
     });
 
-    it("should handle undefined values", () => {
+    it('should handle undefined values', () => {
       // Arrange
       type Source = {
         value: undefined;
@@ -203,7 +203,7 @@ describe("simpleMap", () => {
       expect(result).toEqual({ value: undefined });
     });
 
-    it("should handle empty objects", () => {
+    it('should handle empty objects', () => {
       // Arrange
       type Source = Record<string, never>;
       const source: Source = {};
@@ -216,7 +216,7 @@ describe("simpleMap", () => {
       expect(result).toEqual({});
     });
 
-    it("should handle objects with circular references", () => {
+    it('should handle objects with circular references', () => {
       // Arrange
       type Source = {
         self?: Source;
@@ -225,8 +225,9 @@ describe("simpleMap", () => {
       source.self = source;
 
       // Act & Assert
-      expect(() => simpleMap<Source, Source>(source))
-        .toThrowError("Circular reference detected during deep cloning");
+      expect(() => simpleMap<Source, Source>(source)).toThrowError(
+        'Circular reference detected during deep cloning'
+      );
     });
   });
 });

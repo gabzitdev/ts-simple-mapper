@@ -12,17 +12,18 @@ fi
 
 # Block pushing all tags at once
 if echo "$GIT_PUSH_COMMAND" | grep -q -- "--tags"; then
-  echo "❌ Error: Pushing all tags via '--tags' is not allowed."
+  echo "❌ Pushing all tags via '--tags' is not allowed."
   echo "👉 Please push a single tag like: git push origin vX.Y.Z"
-  echo "❌ -----------------------------------------------------"
+  echo "👉 -----------------------------------------------------"
   exit 1
 fi
 
 # Use `git for-each-ref` to find pushed tag ref
-TAG_REF=$(echo "$TAG_REFS" | head -n1)
+TAG_REF=$(git for-each-ref --format='%(refname:short)' refs/tags --sort=-creatordate | head -n1)
 
 if [ -z "$TAG_REF" ]; then
   echo "ℹ️ No tag detected. Allowing push."
+  echo "ℹ️ -------------------------------"
   exit 0
 fi
 
@@ -40,10 +41,9 @@ echo "🔢 Tag version: $TAG_VERSION"
 
 # Compare
 if [ "$TAG_VERSION" != "$PKG_VERSION" ]; then
-  echo "❌ Error: Version mismatch!"
+  echo "❌ Version mismatch!"
   echo "   Tag:         $TAG_VERSION"
   echo "   package.json $PKG_VERSION"
-  echo "❌ -----------------------------------------------------"
   exit 1
 fi
 
