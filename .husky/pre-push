@@ -18,8 +18,9 @@ if echo "$GIT_PUSH_COMMAND" | grep -q -- "--tags"; then
   exit 1
 fi
 
-# Check for multiple tags being pushed
-TAG_COUNT=$(echo "$TAG_REFS" | wc -l)
+# Get the list of tags being pushed
+PUSHED_TAGS=$(git push --dry-run "$@" 2>/dev/null | grep '^ *[^ ]* *refs/tags/' || true)
+TAG_COUNT=$(echo "$PUSHED_TAGS" | wc -l)
 
 if [ "$TAG_COUNT" -gt 1 ]; then
   echo "❌ Error: Pushing multiple tags at once is not allowed."
