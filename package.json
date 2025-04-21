@@ -1,7 +1,7 @@
 {
   "name": "ts-simple-mapper",
   "description": "A lightweight utility for mapping object properties between different shapes",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "type": "module",
   "scripts": {
     "build": "vite build",
@@ -43,6 +43,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gabzitdev/ts-somple-mapper.git"
+    "url": "https://github.com/gabzitdev/ts-simple-mapper"
   }
 }
