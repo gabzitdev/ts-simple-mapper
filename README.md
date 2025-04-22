@@ -66,7 +66,7 @@ const result = simpleMap<Source, Target>(source, {
 
 ## API
 
-### `simpleMap<Source, Target>(source: Source, options?: SimpleMapOptions): Target`
+### `simpleMap<Source, Target>(source: Source, options?: MapOptions): Target`
 
 Maps properties from a source object to a target object with support for field exclusions, custom transformations, and field name mappings.
 
@@ -78,7 +78,7 @@ Maps properties from a source object to a target object with support for field e
 #### Options
 
 ```typescript
-interface SimpleMapOptions {
+interface MapOptions {
   exclude?: string[];                    // Fields to exclude from mapping
   transforms?: Record<string, Function>; // Custom transformation functions
   fieldMappings?: Record<string, string>; // Source to target field name mappings

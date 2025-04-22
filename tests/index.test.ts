@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { simpleMap } from '../src';
-import { SimpleMapOptions } from '../src/types';
+import { MapOptions } from '../src/types';
 
 describe('simpleMap', () => {
   it('should map simple objects', () => {
@@ -37,7 +37,7 @@ describe('simpleMap', () => {
       age: 30,
       internalId: '123',
     };
-    const options: SimpleMapOptions = {
+    const options: MapOptions = {
       exclude: ['internalId'],
     };
 
@@ -69,7 +69,7 @@ describe('simpleMap', () => {
       birthDate: '1990-01-01',
       amount: '100.50',
     };
-    const options: SimpleMapOptions = {
+    const options: MapOptions = {
       transforms: {
         birthDate: (value: string) => new Date(value),
         amount: (value: string) => parseFloat(value),
@@ -102,7 +102,7 @@ describe('simpleMap', () => {
       user_id: '123',
       email_address: 'john@example.com',
     };
-    const options: SimpleMapOptions = {
+    const options: MapOptions = {
       fieldMappings: {
         name: 'full_name',
         id: 'user_id',
@@ -179,7 +179,7 @@ describe('simpleMap', () => {
         value: null;
       };
       const source: Source = { value: null };
-      const options: SimpleMapOptions = {};
+      const options: MapOptions = {};
 
       // Act
       const result = simpleMap<Source, Source>(source, options);
@@ -194,7 +194,7 @@ describe('simpleMap', () => {
         value: undefined;
       };
       const source: Source = { value: undefined };
-      const options: SimpleMapOptions = {};
+      const options: MapOptions = {};
 
       // Act
       const result = simpleMap<Source, Source>(source, options);
@@ -207,7 +207,7 @@ describe('simpleMap', () => {
       // Arrange
       type Source = Record<string, never>;
       const source: Source = {};
-      const options: SimpleMapOptions = {};
+      const options: MapOptions = {};
 
       // Act
       const result = simpleMap<Source, Source>(source, options);

@@ -1,10 +1,10 @@
-export * from "./types";
+export * from './types';
 
 /**
  * A lightweight utility for mapping object properties between different shapes
  */
 
-import { AnyObject, MapOptions } from "./types";
+import { AnyObject, MapOptions } from './types';
 
 /**
  * Maps properties from a source object to a target object with support for
@@ -30,15 +30,11 @@ import { AnyObject, MapOptions } from "./types";
  *   }
  * });
  */
-export function simpleMap<T extends AnyObject, R extends AnyObject>(
+export function simpleMap<T extends AnyObject, R>(
   source: T,
   options: MapOptions = {}
 ): R {
-  const {
-    exclude = [],
-    transforms = {},
-    fieldMappings = {},
-  } = options;
+  const { exclude = [], transforms = {}, fieldMappings = {} } = options;
 
   const result = {} as R;
 
@@ -47,15 +43,11 @@ export function simpleMap<T extends AnyObject, R extends AnyObject>(
       if (exclude.includes(sourceKey)) continue;
 
       const targetKey =
-        Object.entries(fieldMappings).find(
-          ([_, value]) => value === sourceKey
-        )?.[0] || sourceKey;
+        Object.entries(fieldMappings).find(([_, value]) => value === sourceKey)?.[0] || sourceKey;
       const value = source[sourceKey];
 
       if (transforms && targetKey in transforms) {
-        (result as any)[targetKey] = transforms[targetKey](
-          cloneValue(value)
-        );
+        (result as any)[targetKey] = transforms[targetKey](cloneValue(value));
       } else {
         (result as any)[targetKey] = cloneValue(value);
       }
@@ -73,17 +65,17 @@ export function simpleMap<T extends AnyObject, R extends AnyObject>(
  * @throws Error if a circular reference is detected
  */
 function cloneValue(value: unknown, seen = new WeakSet()): unknown {
-  if (value === null || typeof value !== "object") {
+  if (value === null || typeof value !== 'object') {
     return value;
   }
 
   if (seen.has(value)) {
-    throw new Error("Circular reference detected during deep cloning");
+    throw new Error('Circular reference detected during deep cloning');
   }
   seen.add(value);
 
   if (Array.isArray(value)) {
-    return value.map((item) => cloneValue(item, seen));
+    return value.map(item => cloneValue(item, seen));
   }
 
   if (value instanceof Date) {
