@@ -116,6 +116,7 @@ const result = simpleMap<typeof source, any>(source, {
 //   a: { b: { c: 3, d: 3 } },
 //   untouched: 1
 // }
+```
 
 ## API
 
@@ -150,6 +151,33 @@ interface MapOptions {
 - Field name mapping
 - Null and undefined handling
 - Circular reference detection and prevention
+
+## Release Process
+
+This project uses [semantic-release](https://semantic-release.gitbook.io/) for fully automated versioning, changelog generation, npm publishing, and GitHub releases.
+
+### How it works
+- Every push to the `main` branch triggers an automated release workflow.
+- The next version is determined from commit messages using the [Conventional Commits](https://www.conventionalcommits.org/) standard.
+- The changelog and package version are automatically updated.
+- The package is published to npm and a GitHub release is created.
+
+### Commit Message Guidelines
+To trigger the correct release type, use these Conventional Commit prefixes:
+
+- `feat:` — for new features (triggers a minor version bump)
+- `fix:` — for bug fixes (triggers a patch version bump)
+- `BREAKING CHANGE:` — in body or footer for breaking changes (triggers a major version bump)
+- `chore:`, `docs:`, `test:`, etc. — for non-release changes
+
+**Examples:**
+```sh
+feat: add support for nested transforms
+fix: handle circular references in deep clones
+chore: update dependencies
+```
+
+No manual versioning or changelog editing is needed—just follow the commit message convention and semantic-release handles the rest!
 
 ## Development
 
