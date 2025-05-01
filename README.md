@@ -151,6 +151,7 @@ interface MapOptions {
 - Field name mapping
 - Null and undefined handling
 - Circular reference detection and prevention
+- Exclude fields from mapping with the `exclude` option
 
 ## Release Process
 
