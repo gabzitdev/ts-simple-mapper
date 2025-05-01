@@ -172,6 +172,126 @@ describe('simpleMap', () => {
     expect(result.date).not.toBe(source.date); // Should create a new Date
   });
 
+  describe('nested transforms', () => {
+    it('should apply a nested transform to a nested property', () => {
+      // Arrange
+      const source = {
+        id: 1,
+        nested: {
+          value: 5,
+          untouched: 10,
+        },
+        top: 'keep',
+      };
+      const options: MapOptions = {
+        transforms: {
+          nested: {
+            value: (v: number) => v * 10,
+          },
+        },
+      };
+      const expected = {
+        id: 1,
+        nested: {
+          value: 50,
+          untouched: 10,
+        },
+        top: 'keep',
+      };
+
+      // Act
+      const result = simpleMap<typeof source, any>(source, options);
+
+      // Assert
+      expect(result).toEqual(expected);
+    });
+
+    it('should apply multiple levels of nested transforms', () => {
+      // Arrange
+      const source = {
+        a: {
+          b: {
+            c: 2,
+            d: 3,
+          },
+        },
+        untouched: 1,
+      };
+      const expected = {
+        a: {
+          b: {
+            c: 3,
+            d: 3,
+          },
+        },
+        untouched: 1,
+      };
+      const options: MapOptions = {
+        transforms: {
+          a: {
+            b: {
+              c: (v: number) => v + 1,
+            },
+          },
+        },
+      };
+
+      // Act
+      const result = simpleMap<typeof source, any>(source, options);
+
+      // Assert
+      expect(result).toEqual(expected);
+    });
+
+    it('should not transform if transform is missing for nested property', () => {
+      // Arrange
+      const source = {
+        nested: {
+          value: 42,
+        },
+      };
+
+      const options: MapOptions = {
+        transforms: {
+          nested: {},
+        },
+      };
+
+      // Act
+      const result = simpleMap<typeof source, any>(source, options);
+
+      // Assert
+      expect(result).toEqual(source);
+    });
+
+    it('should handle arrays in nested objects', () => {
+      // Arrange
+      const source = {
+        group: {
+          items: [1, 2, 3],
+        },
+      };
+      const options = {
+        transforms: {
+          group: {
+            items: (arr: number[]) => arr.map(x => x * 2),
+          },
+        },
+      };
+      const expected = {
+        group: {
+          items: [2, 4, 6],
+        },
+      };
+
+      // Act
+      const result = simpleMap<typeof source, any>(source, options);
+
+      // Assert
+      expect(result).toEqual(expected);
+    });
+  });
+
   describe('special cases', () => {
     it('should handle null values', () => {
       // Arrange

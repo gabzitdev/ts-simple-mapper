@@ -47,7 +47,14 @@ export function simpleMap<T extends AnyObject, R>(
       const value = source[sourceKey];
 
       if (transforms && targetKey in transforms) {
-        (result as any)[targetKey] = transforms[targetKey](cloneValue(value));
+        const transform = transforms[targetKey];
+        if (typeof transform === 'function') {
+          (result as any)[targetKey] = transform(cloneValue(value));
+        } else if (typeof transform === 'object' && transform !== null && typeof value === 'object' && value !== null) {
+          (result as any)[targetKey] = simpleMap(value, { transforms: transform });
+        } else {
+          (result as any)[targetKey] = cloneValue(value);
+        }
       } else {
         (result as any)[targetKey] = cloneValue(value);
       }

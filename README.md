@@ -1,6 +1,10 @@
 # ts-simple-mapper
 
-A lightweight utility for mapping object properties between different shapes in TypeScript.
+> **A super lightweight, dead-simple TypeScript utility for data mapping.**
+> 
+> - Focused solely on data mapping—nothing less, nothing more.
+> - No decorators, no classes, no build steps, no dependencies.
+> - Just a function and a plain object for configuration—easy to learn, easy to use.
 
 ## Installation
 
@@ -33,25 +37,25 @@ interface Target {
 
 // Example with multiple features
 const source: Source = {
-  internalId: "123",
-  full_name: "John Doe",
-  user_id: "456",
-  email_address: "john@example.com",
-  birthDate: "1990-01-01",
-  amount: "100.50"
+  internalId: '123',
+  full_name: 'John Doe',
+  user_id: '456',
+  email_address: 'john@example.com',
+  birthDate: '1990-01-01',
+  amount: '100.50',
 };
 
 const result = simpleMap<Source, Target>(source, {
   exclude: ['internalId'],
   transforms: {
-    birthDate: (value) => new Date(value),
-    amount: (value) => parseFloat(value)
+    birthDate: value => new Date(value),
+    amount: value => parseFloat(value),
   },
   fieldMappings: {
     full_name: 'name',
     user_id: 'id',
-    email_address: 'email'
-  }
+    email_address: 'email',
+  },
 });
 
 // Result:
@@ -62,7 +66,56 @@ const result = simpleMap<Source, Target>(source, {
 //   birthDate: Date("1990-01-01"),
 //   amount: 100.50
 // }
-```
+
+// Example with nested transforms
+const source = {
+  id: 1,
+  nested: {
+    value: 5,
+    untouched: 10,
+  },
+  top: 'keep',
+};
+
+const result = simpleMap<typeof source, any>(source, {
+  transforms: {
+    nested: {
+      value: (v: number) => v * 10,
+    },
+  },
+});
+// result:
+// {
+//   id: 1,
+//   nested: { value: 50, untouched: 10 },
+//   top: 'keep'
+// }
+
+// You can nest transforms to any depth:
+const source = {
+  a: {
+    b: {
+      c: 2,
+      d: 3,
+    },
+  },
+  untouched: 1,
+};
+
+const result = simpleMap<typeof source, any>(source, {
+  transforms: {
+    a: {
+      b: {
+        c: (v: number) => v + 1,
+      },
+    },
+  },
+});
+// result:
+// {
+//   a: { b: { c: 3, d: 3 } },
+//   untouched: 1
+// }
 
 ## API
 
@@ -79,7 +132,7 @@ Maps properties from a source object to a target object with support for field e
 
 ```typescript
 interface MapOptions {
-  exclude?: string[];                    // Fields to exclude from mapping
+  exclude?: string[]; // Fields to exclude from mapping
   transforms?: Record<string, Function>; // Custom transformation functions
   fieldMappings?: Record<string, string>; // Source to target field name mappings
 }
@@ -93,29 +146,10 @@ interface MapOptions {
 ## Features
 
 - Type-safe mapping with TypeScript
-- Field exclusion
 - Custom transformations
 - Field name mapping
 - Null and undefined handling
-
-## Future Features
-
-The following features are not currently supported but may be added in future versions:
-
-- Nested transforms: Apply transformations to nested object properties
-  ```typescript
-  // Example of potential future nested transforms
-  const nestedTransform = simpleMap<Source, Target>(source, {
-    transforms: {
-      // Using dotted notation
-      'nested.property': (value) => transformValue(value),
-      // OR using nested object notation
-      nested: {
-        property: (value) => transformValue(value)
-      }
-    }
-  });
-  ```
+- Circular reference detection and prevention
 
 ## Development
 
@@ -135,4 +169,4 @@ npm run build
 
 ## License
 
-MIT 
+MIT
